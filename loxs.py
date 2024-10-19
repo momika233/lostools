@@ -762,7 +762,7 @@ try:
             
             cookie = input("[?] Enter the cookie to include in the GET request (press Enter if none): ").strip() or None
 
-            threads = int(input("[?] Enter the number of concurrent threads (0-10, press Enter for 5): ").strip() or 5)
+            threads = int(input("[?] Enter the number of concurrent threads (0-50, press Enter for 5): ").strip() or 5)
             print(f"\n{Fore.YELLOW}[i] Loading, Please Wait...")
             time.sleep(1)
             clear_screen()
@@ -1109,9 +1109,9 @@ try:
             payload_file = prompt_for_valid_file_path("[?] Enter the path to the payloads file: ")
 
             try:
-                concurrency_input = input(Fore.CYAN + "\n[?] Enter the number of concurrent threads (1-10, press Enter for 5): ").strip()
+                concurrency_input = input(Fore.CYAN + "\n[?] Enter the number of concurrent threads (1-50, press Enter for 5): ").strip()
                 concurrency = int(concurrency_input) if concurrency_input else 5
-                if not 1 <= concurrency <= 10:
+                if not 1 <= concurrency <= 50:
                     raise ValueError
             except:
                 concurrency = 5
@@ -1327,8 +1327,8 @@ try:
             urls = prompt_for_urls()
             payloads = prompt_for_payloads()
 
-            max_threads_input = input("[?] Enter the number of concurrent threads (0-10, press Enter for 5): ").strip()
-            max_threads = int(max_threads_input) if max_threads_input.isdigit() and 0 <= int(max_threads_input) <= 10 else 5
+            max_threads_input = input("[?] Enter the number of concurrent threads (0-50, press Enter for 5): ").strip()
+            max_threads = int(max_threads_input) if max_threads_input.isdigit() and 0 <= int(max_threads_input) <= 50 else 5
 
             print(Fore.YELLOW + "\n[i] Loading, Please Wait...")
             clear_screen()
@@ -1577,8 +1577,8 @@ try:
         success_criteria_input = input("[?] Enter the success criteria patterns (comma-separated, e.g: 'root:,admin:', press Enter for 'root:x:0:'): ").strip()
         success_criteria = [pattern.strip() for pattern in success_criteria_input.split(',')] if success_criteria_input else ['root:x:0:']
         
-        max_threads_input = input("[?] Enter the number of concurrent threads (0-10, press Enter for 5): ").strip()
-        max_threads = int(max_threads_input) if max_threads_input.isdigit() and 0 <= int(max_threads_input) <= 10 else 5
+        max_threads_input = input("[?] Enter the number of concurrent threads (0-50, press Enter for 5): ").strip()
+        max_threads = int(max_threads_input) if max_threads_input.isdigit() and 0 <= int(max_threads_input) <= 50 else 5
 
         print(Fore.YELLOW + "\n[i] Loading, Please Wait...")
         time.sleep(1)
