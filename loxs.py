@@ -671,12 +671,23 @@ try:
                 os._exit(0)
 
         def save_results(vulnerable_urls, total_found, total_scanned, start_time):
-            generate_report = input(f"{Fore.CYAN}\n[?] Do you want to generate an HTML report? (y/n): ").strip().lower()
-            if generate_report == 'y':
-                html_content = generate_html_report("Structured Query Language Injection (SQLi)", total_found, total_scanned, int(time.time() - start_time), vulnerable_urls)
-                filename = input(f"{Fore.CYAN}[?] Enter the filename for the HTML report: ").strip()
-                report_file = save_html_report(html_content, filename)
-                
+            html_content = generate_html_report(
+            "Structured Query Language Injection (SQLi)", 
+            total_found, 
+            total_scanned, 
+            int(time.time() - start_time), 
+            vulnerable_urls
+            )
+    
+
+            timestamp = int(time.time())
+            filename = f"sqli_report_{timestamp}.html"
+            print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
+
+            report_file = save_html_report(html_content, filename)
+            print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
+
+
         def prompt_for_urls():
             while True:
                 try:
@@ -1022,21 +1033,23 @@ try:
                 print(Fore.YELLOW + line)
 
         def save_results(vulnerable_urls, total_found, total_scanned, start_time):
-            action = input(Fore.CYAN + "[?] Do you want to generate an HTML report? (y/n): ").strip().lower()
-            if action == 'y':
-                html_content = generate_html_report("Cross-Site Scripting (XSS)", total_found, total_scanned, int(time.time() - start_time), vulnerable_urls)
-                
-                filename = input(Fore.CYAN + "[?] Enter the filename for the HTML report (e.g., report.html) or press Enter to use 'xss_report.html': ").strip()
-                if not filename:
-                    filename = 'xss_report.html'
-                    print(Fore.YELLOW + "[i] No filename provided. Using 'xss_report.html'.")
+            html_content = generate_html_report(
+            "Cross-Site Scripting (XSS)", 
+            total_found, 
+            total_scanned, 
+            int(time.time() - start_time), 
+            vulnerable_urls
+        )
+        
 
-                print(f"DEBUG: Chosen filename: '{filename}'")
-                
-                report_file = save_html_report(html_content, filename)
-            else:
-                print(Fore.RED + "[!] Invalid option. Exiting the program.")
-                os._exit(0)
+            timestamp = int(time.time())
+            filename = f"xss_report_{timestamp}.html"
+            print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
+
+
+            report_file = save_html_report(html_content, filename)
+            print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
+
 
         def clear_screen():
             os.system('cls' if os.name == 'nt' else 'clear')
@@ -1287,11 +1300,22 @@ try:
 
         def save_results(vulnerable_urls, total_found, total_scanned, start_time):
             if total_scanned > 0:
-                generate_report = input(f"{Fore.CYAN}\n[?] Do you want to generate an HTML report? (y/n): ").strip().lower()
-                if generate_report == 'y':
-                    html_content = generate_html_report("Open Redirect (OR)", total_found, total_scanned, int(time.time() - start_time), vulnerable_urls)
-                    filename = input(f"{Fore.CYAN}[?] Enter the filename for the HTML report: ").strip()
-                    report_file = save_html_report(html_content, filename)
+
+                html_content = generate_html_report(
+                    "Open Redirect (OR)", 
+                    total_found, 
+                    total_scanned, 
+                    int(time.time() - start_time), 
+                    vulnerable_urls
+                )
+
+                timestamp = int(time.time())
+                filename = f"or_report_{timestamp}.html"
+                print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
+
+
+                report_file = save_html_report(html_content, filename)
+                print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
             else:
                 print(Fore.RED + "[!] No URLs were scanned, skipping report generation.")
 
@@ -1471,12 +1495,23 @@ try:
             return found_vulnerabilities, vulnerable_urls
 
         def save_results(vulnerable_urls, total_found, total_scanned, start_time):
-            generate_report = input(f"{Fore.CYAN}\n[?] Do you want to generate an HTML report? (y/n): ").strip().lower()
-            if generate_report == 'y':
-                html_content = generate_html_report("Local File Inclusion (LFI)", total_found, total_scanned, int(time.time() - start_time), vulnerable_urls)
-                filename = input(f"{Fore.CYAN}[?] Enter the filename for the HTML report: ").strip()
-                report_file = save_html_report(html_content, filename)
-                
+            html_content = generate_html_report(
+                "Local File Inclusion (LFI)", 
+                total_found, 
+                total_scanned, 
+                int(time.time() - start_time), 
+                vulnerable_urls
+            )
+
+
+            timestamp = int(time.time())
+            filename = f"lfi_report_{timestamp}.html"
+            print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
+
+
+            report_file = save_html_report(html_content, filename)
+            print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
+
         def prompt_for_urls():
             while True:
                 try:
